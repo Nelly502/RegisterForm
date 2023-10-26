@@ -1,57 +1,85 @@
 package com.example.registerform
-
-import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.RadioGroup
-import android.widget.RadioButton
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.ViewGroup
+import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.constraintlayout.widget.ConstraintSet.*
+import com.example.registerform.R
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var firstNameEditText: EditText
-    private lateinit var lastNameEditText: EditText
-    private lateinit var genderRadioGroup: RadioGroup
-    private lateinit var dobEditText: EditText
-    private lateinit var addressEditText: EditText
-    private lateinit var emailEditText: EditText
-    private lateinit var agreeCheckBox: CheckBox
-    private lateinit var registerButton: Button
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        // Sử dụng findViewById để tìm các thành phần trên giao diện
-        firstNameEditText = findViewById(R.id.firstNameEditText)
-        lastNameEditText = findViewById(R.id.lastNameEditText)
-        genderRadioGroup = findViewById(R.id.genderRadioGroup)
-        dobEditText = findViewById(R.id.dobEditText)
-        addressEditText = findViewById(R.id.addressEditText)
-        emailEditText = findViewById(R.id.emailEditText)
-        agreeCheckBox = findViewById(R.id.agreeCheckBox)
-        registerButton = findViewById(R.id.registerButton)
+        val isConstraintLayout = true  
 
-        // Đăng ký sự kiện nhấn nút Register
-        registerButton.setOnClickListener {
-            val firstName = firstNameEditText.text.toString()
-            val lastName = lastNameEditText.text.toString()
-            val genderId = genderRadioGroup.checkedRadioButtonId
-            val dob = dobEditText.text.toString()
-            val address = addressEditText.text.toString()
-            val email = emailEditText.text.toString()
-            val isAgreed = agreeCheckBox.isChecked
+        if (isConstraintLayout) {
+            val constraintLayout = ConstraintLayout(this)
+            constraintLayout.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
 
-            if (firstName.isEmpty() || lastName.isEmpty() || genderId == -1 || dob.isEmpty() || address.isEmpty() || email.isEmpty() || !isAgreed) {
-                Toast.makeText(this, "Please fill in all fields and agree to the Terms of Use.", Toast.LENGTH_SHORT).show()
-            } else {
-                // Nếu tất cả thông tin hợp lệ, thực hiện đăng ký ở đây
-                // Ví dụ: Lưu thông tin vào cơ sở dữ liệu hoặc gửi đăng ký đến máy chủ
-                // Code xử lý đăng ký ở đây
-                Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show()
+            val registerButton = Button(this)
+            registerButton.id = R.id.registerButton
+
+
+            registerButton.setOnClickListener {
+                val firstNameEditText = constraintLayout.findViewById<EditText>(R.id.firstNameEditText)
+                val lastNameEditText = constraintLayout.findViewById<EditText>(R.id.lastNameEditText)
+                val agreeCheckBox = constraintLayout.findViewById<CheckBox>(R.id.agreeCheckBox)
+
+                val firstName = firstNameEditText.text.toString()
+                val lastName = lastNameEditText.text.toString()
+                val isAgreed = agreeCheckBox.isChecked
+
+                if (firstName.isEmpty() || lastName.isEmpty() || !isAgreed) {
+                    Toast.makeText(
+                        this,
+                        "Please fill in all fields and agree to the terms.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                }
             }
+
+            setContentView(constraintLayout)
+        } else {
+            val linearLayout = LinearLayout(this)
+            linearLayout.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            linearLayout.orientation = LinearLayout.VERTICAL
+
+
+            val registerButton = Button(this)
+            registerButton.id = R.id.registerButtonNoConstraint
+
+            registerButton.setOnClickListener {
+                val firstNameEditText = linearLayout.findViewById<EditText>(R.id.firstNameEditTextNoConstraint)
+                val lastNameEditText = linearLayout.findViewById<EditText>(R.id.lastNameEditTextNoConstraint)
+                val agreeCheckBox = linearLayout.findViewById<CheckBox>(R.id.agreeCheckBoxNoConstraint)
+
+                val firstName = firstNameEditText.text.toString()
+                val lastName = lastNameEditText.text.toString()
+                val isAgreed = agreeCheckBox.isChecked
+
+                if (firstName.isEmpty() || lastName.isEmpty() || !isAgreed) {
+                    // Show a simple Toast message if the conditions are not met
+                    Toast.makeText(
+                        this,
+                        "Please fill in all fields and agree to the terms.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                }
+            }
+
+            linearLayout.addView(registerButton)
+
+            setContentView(linearLayout)
         }
     }
 }

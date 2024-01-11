@@ -1,4 +1,4 @@
-package com.example.registerform
+package com.example.registerapp
 
 import org.junit.Test
 
